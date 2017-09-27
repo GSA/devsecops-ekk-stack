@@ -1,23 +1,23 @@
 # IAM roles and policies for this stack
 
+# Policies
+
+data "template_file" "ec2_assume_role_policy" {
+  template = "${file("${path.module}/policies/ec2_assume_role.json")}"
+}
+
+data "template_file" "firehose_assume_role_policy" {
+  template = "${file("${path.module}/policies/firehose_assume_role.json")}"
+}
+
+data "template_file" "elasticsearch_policy" {
+  template = "${file("${path.module}/policies/elasticsearch_policy.json")}"
+}
+
 # S3
 resource "aws_iam_role" "s3_delivery_role" {
     name = "${var.s3_delivery_role_name}"
-    assume_role_policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": "sts:AssumeRole",
-            "Principal": {
-                "Service": "firehose.amazonaws.com"
-            },
-            "Effect": "Allow",
-            "Sid": ""
-        }
-    ]
-}
-EOF
+    assume_role_policy = "${data.template_file.firehose_assume_role_policy.rendered}"
 }
 
 data "aws_iam_policy_document" "s3_log_bucket_access" {
@@ -40,21 +40,7 @@ resource "aws_iam_policy" "s3_log_bucket_iam_policy" {
 # ElasticSearch
 resource "aws_iam_role" "elasticsearch_role" {
     name = "${var.elasticsearch_role_name}"
-    assume_role_policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": "sts:AssumeRole",
-            "Principal": {
-                "Service": "ec2.amazonaws.com"
-            },
-            "Effect": "Allow",
-            "Sid": ""
-        }
-    ]
-}
-EOF
+    assume_role_policy = "${data.template_file.ec2_assume_role_policy.rendered}"
 }
 
 resource "aws_iam_policy" "elasticsearch_policy" {
@@ -104,21 +90,7 @@ resource "aws_iam_role_policy_attachment" "es_cloudwatch_full_access" {
 
 resource "aws_iam_role" "elasticsearch_delivery_role" {
     name = "${var.es_delivery_role_name}"
-    assume_role_policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": "sts:AssumeRole",
-            "Principal": {
-                "Service": "firehose.amazonaws.com"
-            },
-            "Effect": "Allow",
-            "Sid": ""
-        }
-    ]
-}
-EOF
+    assume_role_policy = "${data.template_file.firehose_assume_role_policy.rendered}"
 }
 
 resource "aws_iam_role_policy_attachment" "es_delivery_full_access" {
