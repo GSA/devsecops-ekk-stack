@@ -3,8 +3,8 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
     destination = "elasticsearch"
     
     elasticsearch_configuration {
-        buffer_interval = "60"
-        buffer_size = "50"
+        buffering_interval = 60
+        buffering_size = 50
         cloudwatch_logging_options {
             enabled = "true"
             log_group_name = "${aws_cloudwatch_log_group.es_log_group.name}"
@@ -23,8 +23,8 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
     s3_configuration {
         role_arn = "${aws_iam_role.s3_delivery_role.arn}"
         bucket_arn = "${aws_s3_bucket.s3_logging_bucket.arn}"
-        buffer_size = "10"
-        buffer_interval = "300"
+        buffer_size = 10
+        buffer_interval = 300
         compression_format = "UNCOMPRESSED"
         prefix = "firehose/"
         cloudwatch_logging_options {
@@ -33,3 +33,4 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
             log_stream_name = "${aws_cloudwatch_log_stream.s3_log_stream.name}"
         }
     }
+}
