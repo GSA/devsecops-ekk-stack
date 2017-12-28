@@ -4,7 +4,7 @@ Terraform that builds an EKK logging stack.
 
 This stack is based on [this CloudFormation example.](https://us-west-2.console.aws.amazon.com/cloudformation/designer/home?region=us-west-2&templateUrl=https://s3.amazonaws.com/scriptdepot/es.template)
 
-It currently does NOT introduce any demonstration data.
+It currently does NOT introduce any demonstration data. Future revisions may include demo data or integration tests.
 
 ## Deployment
 
