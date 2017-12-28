@@ -1,6 +1,6 @@
 resource "aws_elasticsearch_domain" "elasticsearch" {
   domain_name = "${var.es_domain_name}"
-  elasticsearch_version = "${var.es_version}
+  elasticsearch_version = "${var.es_version}"
   
   cluster_config {
       dedicated_master_enabled = "true"
