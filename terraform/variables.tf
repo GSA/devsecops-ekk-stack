@@ -58,3 +58,5 @@ variable "s3_log_stream_name" {
 variable "es_kinesis_delivery_stream" {
     default = "ElasticSearchKinesisDeliveryStream"
 }
+variable "ec_test_instance_key_name" {
+}
