@@ -1,21 +1,6 @@
 module "test_vpc" {
   source = "github.com/terraform-aws-modules/terraform-aws-vpc"
 
-#   name = "${var.vpc_name}"
-
-#   cidr = "${var.vpc_cidr}"
-#   public_subnets  = ["${var.app_public_subnet_cidrs}"]
-#   private_subnets = ["${var.app_private_subnet_cidrs}"]
-#   database_subnets = ["${var.database_subnet_cidrs}"]
-
-#   enable_nat_gateway = "${var.enable_nat_gateway}"
-#   enable_dns_hostnames = "${var.enable_dns_hostnames}"
-#   enable_dns_support = "${var.enable_dns_support}"
-
-#   azs = ["${var.aws_az1}", "${var.aws_az2}"]
-
-#   create_database_subnet_group = "${var.create_database_subnet_group}"
-
 name = "ec2-test"
 cidr = "10.0.0.0/16"
 public_subnets = ["10.0.1.0/24"]
@@ -33,11 +18,6 @@ data "template_file" "user_data_template" {
     deliverystream = "${var.es_kinesis_delivery_stream}"
   }
 }
-
-# resource "local_file" "user_data_rendered" {
-#     content = "${data.template_file.user_data_template.rendered}"
-#     filename = "${path.module}/files/ec2-test.sh"
-# }
 
 data "aws_ami" "ec2-linux" {
   most_recent = true
