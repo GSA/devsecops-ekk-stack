@@ -8,9 +8,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Validate main terraform
-          command: cd terraform && cp test/terraform.tfvars.example terraform.tfvars && terraform validate
-      - run:
           name: Set variables
           command: cd terraform/test && cp backend.tfvars.example backend.tfvars && cp terraform.tfvars.example terraform.tfvars
       - run:
