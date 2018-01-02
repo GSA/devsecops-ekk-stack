@@ -12,10 +12,10 @@ jobs:
           command: cd terraform/test && cp backend.tfvars.example backend.tfvars && cp terraform.tfvars.example terraform.tfvars
       - run:
           name: EKK Stack - Set up Terraform
-          command: cd terraform/test && terraform init -backend=false
+          command: terraform init -backend=false test
       - run:
           name: EKK Stack - Validate Terraform
-          command: cd terraform/test && terraform validate
+          command: terraform validate -check-variables=false test
 
 workflows:
   version: 2
