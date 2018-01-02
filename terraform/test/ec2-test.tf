@@ -1,13 +1,7 @@
-module "test_vpc" {
-  source = "github.com/terraform-aws-modules/terraform-aws-vpc"
-
-  name = "ec2-test"
-  cidr = "10.0.0.0/16"
-  public_subnets = ["10.0.1.0/24"]
-  enable_nat_gateway = "false"
-  enable_dns_hostnames = "true"
-  enable_dns_support = "true"
-  azs = ["us-east-1c", "us-east-1d"]
+module "ekk_stack" {
+  source = "../"
+  s3_logging_bucket_name = "${var.s3_logging_bucket_name}"
+  ec_test_instance_key_name = "${var.ec_test_instance_key_name}"
 }
 
 data "template_file" "user_data_template" {
@@ -32,30 +26,6 @@ data "aws_ami" "ec2-linux" {
   filter {
     name = "owner-alias"
     values = ["amazon"]
-  }
-}
-
-resource "aws_security_group" "main" {
-  vpc_id = "${module.test_vpc.vpc_id}"
-
-  # SSH access from anywhere
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-      from_port = 80
-      to_port = 80
-      protocol = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-  }
-  egress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    cidr_blocks     = ["0.0.0.0/0"]
   }
 }
 
