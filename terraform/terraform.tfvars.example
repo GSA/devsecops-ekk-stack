@@ -1,2 +1,3 @@
 # List your logging bucket name here. Make sure it's done a naming collison with someone else's bucket.
 s3_logging_bucket_name = "<bucket_name>"
+ec_test_instance_key_name = "<key_pair_name>"
