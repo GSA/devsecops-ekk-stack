@@ -8,9 +8,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Set variables
-          command: cd terraform/test && cp backend.tfvars.example backend.tfvars && cp terraform.tfvars.example terraform.tfvars
-      - run:
           name: EKK Stack - Set up Terraform
           command: cd terraform/test && terraform init -backend=false
       - run:
