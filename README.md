@@ -8,10 +8,31 @@ The stack also creates a small EC2 instance (defined in ec2-test.tf) that will b
 
 ## Deployment
 
+This stack is meant to be consumed as a module in your existing terraform stack. You can consume it by using code similar to this:
+
+    ````
+    module "ekk_stack" {
+        source = "github.com/GSA/devsecops-ekk-stack"
+        s3_logging_bucket_name = "${var.s3_logging_bucket_name}"
+        es_kinesis_delivery_stream = "${var.es_kinesis_delivery_stream}"
+    }
+    ````
+
+...where the variables referenced above are defined in your terraform.tfvars file.
+
+Following the steps below will emulate this exact behavior. You must execute it from the test directory just below the terraform directory. The test consumes the stack as a module and deploys it, then sets up an EC2 instance that will install the aws-kinesis-agent and configure it to stream to the Kinesis Firehose delivery stream.
+
+The Kinesis stream will send to Elasticsearch and S3.
+
+The EC2 instance also configures itself with a cron job that performs a curl against its local apache2 daemon 5900 times every minute. This is used to generate logs that the Kinesis agent will capture. To verify that it is working properly, you can login to the EC2 instance and tail the aws-kinesis agent log (/var/log/aws-kinesis/aws-kinesis-agent.log) or look in the web console at the CloudWatch metrics for the Firehose delivery stream itself.
+
+Use these steps to deploy the test.
+
 1. Create an S3 bucket for the terraform state.
 1. Run the following command:
 
     ````sh
+    cd terraform/test
     cp backend.tfvars.example backend.tfvars
     cp terraform.tfvars.example terraform.tfvars
     ````
