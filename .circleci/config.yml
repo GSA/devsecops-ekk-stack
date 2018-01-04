@@ -8,14 +8,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Set variables
-          command: cd terraform && cp backend.tfvars.example backend.tfvars && cp terraform.tfvars.example terraform.tfvars
-      - run:
           name: EKK Stack - Set up Terraform
-          command: cd terraform && terraform init -backend=false
+          command: cd terraform/test && terraform init -backend=false
       - run:
           name: EKK Stack - Validate Terraform
-          command: cd terraform && terraform validate
+          command: cd terraform/test && terraform validate -check-variables=false
 
 workflows:
   version: 2

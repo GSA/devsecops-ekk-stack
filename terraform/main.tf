@@ -1,3 +1,46 @@
+resource "aws_elasticsearch_domain" "elasticsearch" {
+  domain_name = "${var.es_domain_name}"
+  elasticsearch_version = "${var.es_version}"
+  
+  cluster_config {
+      dedicated_master_enabled = "true"
+      instance_type = "${var.es_instance_type}"
+      instance_count = "${var.es_instance_count}"
+      zone_awareness_enabled = "true"
+      dedicated_master_type = "${var.es_dedicated_master_instance_type}"
+      dedicated_master_count = "${var.es_dedicated_master_count}"
+  }
+
+  advanced_options {
+      "rest.action.multi.allow_explicit_index" = "true"
+  }
+
+  ebs_options {
+      ebs_enabled = "true"
+      iops = "0"
+      volume_size = "20"
+      volume_type = "gp2"
+  }
+
+  snapshot_options {
+      automated_snapshot_start_hour = 0
+  }
+
+    access_policies = <<CONFIG
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "es:*",
+            "Principal": "*",
+            "Effect": "Allow",
+            "Resource": "*"
+        }
+    ]
+}
+CONFIG
+}
+
 # IAM roles and policies for this stack
 
 # Policies
@@ -102,3 +145,66 @@ resource "aws_iam_role_policy_attachment" "es_delivery_full_access" {
     role = "${aws_iam_role.elasticsearch_delivery_role.name}"
     policy_arn = "arn:aws:iam::aws:policy/AmazonESFullAccess"
 }
+
+resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
+    name = "${var.es_kinesis_delivery_stream}"
+    destination = "elasticsearch"
+    
+    elasticsearch_configuration {
+        buffering_interval = 60
+        buffering_size = 50
+        cloudwatch_logging_options {
+            enabled = "true"
+            log_group_name = "${aws_cloudwatch_log_group.es_log_group.name}"
+            log_stream_name = "${aws_cloudwatch_log_stream.es_log_stream.name}"
+        }
+        domain_arn = "${aws_elasticsearch_domain.elasticsearch.arn}"
+        role_arn = "${aws_iam_role.elasticsearch_delivery_role.arn}"
+        index_name = "logmonitor"
+        type_name = "log"
+        index_rotation_period = "NoRotation"
+        retry_duration = "60"
+        role_arn = "${aws_iam_role.elasticsearch_delivery_role.arn}"
+        s3_backup_mode = "AllDocuments"
+    }
+    
+    s3_configuration {
+        role_arn = "${aws_iam_role.s3_delivery_role.arn}"
+        bucket_arn = "${aws_s3_bucket.s3_logging_bucket.arn}"
+        buffer_size = 10
+        buffer_interval = 300
+        compression_format = "UNCOMPRESSED"
+        prefix = "firehose/"
+        cloudwatch_logging_options {
+            enabled = "true"
+            log_group_name = "${aws_cloudwatch_log_group.s3_log_group.name}"
+            log_stream_name = "${aws_cloudwatch_log_stream.s3_log_stream.name}"
+        }
+    }
+}
+
+resource "aws_cloudwatch_log_group" "es_log_group" {
+    name = "${var.es_log_group_name}"
+    retention_in_days = "${var.es_log_retention_in_days}"
+}
+
+resource "aws_cloudwatch_log_group" "s3_log_group" {
+    name = "${var.s3_log_group_name}"
+    retention_in_days = "${var.s3_log_retention_in_days}"
+}
+
+resource "aws_cloudwatch_log_stream" "es_log_stream" {
+    name = "${var.es_log_stream_name}"
+    log_group_name = "${aws_cloudwatch_log_group.es_log_group.name}"
+}
+
+resource "aws_cloudwatch_log_stream" "s3_log_stream" {
+    name = "${var.s3_log_stream_name}"
+    log_group_name = "${aws_cloudwatch_log_group.s3_log_group.name}"
+}
+
+resource "aws_s3_bucket" "s3_logging_bucket" {
+  bucket = "${var.s3_logging_bucket_name}"
+  acl    = "private"
+}
+
