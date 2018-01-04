@@ -3,27 +3,27 @@ resource "aws_elasticsearch_domain" "elasticsearch" {
   elasticsearch_version = "${var.es_version}"
   
   cluster_config {
-      dedicated_master_enabled = "true"
+      dedicated_master_enabled = "${var.es_dedicated_master_enabled}"
       instance_type = "${var.es_instance_type}"
       instance_count = "${var.es_instance_count}"
-      zone_awareness_enabled = "true"
+      zone_awareness_enabled = "${var.es_zone_awareness_enabled}"
       dedicated_master_type = "${var.es_dedicated_master_instance_type}"
       dedicated_master_count = "${var.es_dedicated_master_count}"
   }
 
   advanced_options {
-      "rest.action.multi.allow_explicit_index" = "true"
+      "rest.action.multi.allow_explicit_index" = "${var.es_advanced_allow_explicit_index}"
   }
 
   ebs_options {
-      ebs_enabled = "true"
-      iops = "0"
-      volume_size = "20"
-      volume_type = "gp2"
+      ebs_enabled = "${var.es_ebs_enabled}"
+      iops = "${var.es_ebs_iops}"
+      volume_size = "${var.es_ebs_volume_size}"
+      volume_type = "${var.es_ebs_volume_type}"
   }
 
   snapshot_options {
-      automated_snapshot_start_hour = 0
+      automated_snapshot_start_hour = "${var.es_snapshot_start_hour}"
   }
 
     access_policies = <<CONFIG
@@ -151,32 +151,32 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
     destination = "elasticsearch"
     
     elasticsearch_configuration {
-        buffering_interval = 60
-        buffering_size = 50
+        buffering_interval = "${var.es_buffering_interval}"
+        buffering_size = "${var.es_buffering_size}"
         cloudwatch_logging_options {
-            enabled = "true"
+            enabled = "${var.es_cloudwatch_logging_enabled}"
             log_group_name = "${aws_cloudwatch_log_group.es_log_group.name}"
             log_stream_name = "${aws_cloudwatch_log_stream.es_log_stream.name}"
         }
         domain_arn = "${aws_elasticsearch_domain.elasticsearch.arn}"
         role_arn = "${aws_iam_role.elasticsearch_delivery_role.arn}"
-        index_name = "logmonitor"
-        type_name = "log"
-        index_rotation_period = "NoRotation"
-        retry_duration = "60"
+        index_name = "${var.es_index_name}"
+        type_name = "${var.es_type_name}"
+        index_rotation_period = "${var.es_index_rotation_period}"
+        retry_duration = "${var.es_retry_duration}"
         role_arn = "${aws_iam_role.elasticsearch_delivery_role.arn}"
-        s3_backup_mode = "AllDocuments"
+        s3_backup_mode = "${var.es_s3_backup_mode}"
     }
     
     s3_configuration {
         role_arn = "${aws_iam_role.s3_delivery_role.arn}"
         bucket_arn = "${aws_s3_bucket.s3_logging_bucket.arn}"
-        buffer_size = 10
-        buffer_interval = 300
-        compression_format = "UNCOMPRESSED"
-        prefix = "firehose/"
+        buffer_size = "${var.s3_buffer_size}"
+        buffer_interval = "${var.s3_buffer_interval}"
+        compression_format = "${var.s3_compression_format}"
+        prefix = "${var.s3_prefix}"
         cloudwatch_logging_options {
-            enabled = "true"
+            enabled = "${var.s3_cloudwatch_logging_enabled}"
             log_group_name = "${aws_cloudwatch_log_group.s3_log_group.name}"
             log_stream_name = "${aws_cloudwatch_log_stream.s3_log_stream.name}"
         }

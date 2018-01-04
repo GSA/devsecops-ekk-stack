@@ -1,3 +1,9 @@
+variable "s3_logging_bucket_name" {
+    type = "string"
+}
+variable "es_kinesis_delivery_stream" {
+    type = "string"
+}
 variable "aws_region" {
     default = "us-east-1"
 }
@@ -18,9 +24,6 @@ variable "es_dedicated_master_instance_type" {
 }
 variable "es_dedicated_master_count" {
     default = "2"
-}
-variable "s3_logging_bucket_name" {
-    type = "string"
 }
 variable "elasticsearch_role_name" {
     default = "EKKElasticSearchRole"
@@ -55,5 +58,66 @@ variable "s3_log_retention_in_days" {
 variable "s3_log_stream_name" {
     default = "S3Delivery"
 }
-variable "es_kinesis_delivery_stream" {
+variable "es_dedicated_master_enabled" {
+    default = "true"
+}
+variable "es_zone_awareness_enabled" {
+    default = "true"
+}
+variable "es_advanced_allow_explicit_index" {
+    default = "true"
+}
+variable "es_ebs_enabled" {
+    default = "true"
+}
+variable "es_ebs_iops" {
+    default = "0"
+}
+variable "es_ebs_volume_size" {
+    default = "20"
+}
+variable "es_ebs_volume_type" {
+    default = "gp2"
+}
+variable "es_snapshot_start_hour" {
+    default = "0"
+}
+variable "es_buffering_interval" {
+    default = "60"
+}
+variable "es_buffering_size" {
+    default = "50"
+}
+variable "es_cloudwatch_logging_enabled" {
+    default = "true"
+}
+variable "es_index_name" {
+    default = "logmonitor"
+}
+variable "es_type_name" {
+    default = "log"
+}
+variable "es_index_rotation_period" {
+    default = "NoRotation"
+}
+variable "es_retry_duration" {
+    default = "60"
+}
+variable "es_s3_backup_mode" {
+    default = "AllDocuments"
+}
+variable "s3_buffer_size" {
+    default = "10"
+}
+variable "s3_buffer_interval" {
+    default = "300"
+}
+variable "s3_compression_format" {
+    default = "UNCOMPRESSED"
+}
+variable "s3_prefix" {
+    default = "firehose/"
+}
+variable "s3_cloudwatch_logging_enabled" {
+    default = "true"
 }
