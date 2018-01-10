@@ -175,6 +175,7 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
         buffer_interval = "${var.s3_buffer_interval}"
         compression_format = "${var.s3_compression_format}"
         prefix = "${var.s3_prefix}"
+        kms_key_arn = "${var.s3_kms_key_arn}"
         cloudwatch_logging_options {
             enabled = "${var.s3_cloudwatch_logging_enabled}"
             log_group_name = "${aws_cloudwatch_log_group.s3_log_group.name}"

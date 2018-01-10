@@ -4,6 +4,10 @@ variable "s3_logging_bucket_name" {
 variable "es_kinesis_delivery_stream" {
     type = "string"
 }
+variable "s3_kms_key_arn" {
+    type = "string"
+    description = "KMS Key ARN used to encrypt data within S3 bucket. The key must already exist within the account."
+}
 variable "aws_region" {
     default = "us-east-1"
 }
