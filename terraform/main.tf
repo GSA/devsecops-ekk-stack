@@ -1,3 +1,9 @@
+resource "aws_kms_key" "s3_logging_kms_key" {
+    count = "${var.s3_kms_key_arn != "" ? 1 : 0}"
+
+    description = "S3 Logging KMS Key - Created by Terraform"
+}
+
 resource "aws_elasticsearch_domain" "elasticsearch" {
   domain_name = "${var.es_domain_name}"
   elasticsearch_version = "${var.es_version}"
@@ -175,7 +181,7 @@ resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
         buffer_interval = "${var.s3_buffer_interval}"
         compression_format = "${var.s3_compression_format}"
         prefix = "${var.s3_prefix}"
-        kms_key_arn = "${var.s3_kms_key_arn}"
+        kms_key_arn = "${var.s3_kms_key_arn != "" ? var.s3_kms_key_arn : aws_kms_key.s3_logging_kms_key.arn}"
         cloudwatch_logging_options {
             enabled = "${var.s3_cloudwatch_logging_enabled}"
             log_group_name = "${aws_cloudwatch_log_group.s3_log_group.name}"
