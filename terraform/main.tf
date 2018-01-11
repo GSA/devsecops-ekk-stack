@@ -1,5 +1,5 @@
 resource "aws_kms_key" "s3_logging_kms_key" {
-    count = "${var.s3_kms_key_arn != "" ? 1 : 0}"
+    count = "${var.s3_kms_key_arn == "" ? 1 : 0}"
 
     description = "S3 Logging KMS Key - Created by Terraform"
 }
