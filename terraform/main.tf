@@ -129,15 +129,15 @@ resource "aws_iam_policy" "s3_log_bucket_iam_policy" {
 #     policy_arn = "arn:aws:iam::aws:policy/AmazonESFullAccess"
 # }
 
-resource "aws_iam_role_policy_attachment" "s3_full_access" {
-    role = "${aws_iam_role.elasticsearch_role.name}"
-    policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-}
+# resource "aws_iam_role_policy_attachment" "s3_full_access" {
+#     role = "${aws_iam_role.elasticsearch_role.name}"
+#     policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+# }
 
-resource "aws_iam_role_policy_attachment" "es_kinesisfirehouse_full_access" {
-    role = "${aws_iam_role.elasticsearch_role.name}"
-    policy_arn = "arn:aws:iam::aws:policy/AmazonKinesisFirehoseFullAccess"
-}
+# resource "aws_iam_role_policy_attachment" "es_kinesisfirehouse_full_access" {
+#     role = "${aws_iam_role.elasticsearch_role.name}"
+#     policy_arn = "arn:aws:iam::aws:policy/AmazonKinesisFirehoseFullAccess"
+# }
 
 # resource "aws_iam_role_policy_attachment" "es_cloudwatch_full_access" {
 #     role = "${aws_iam_role.elasticsearch_role.name}"
