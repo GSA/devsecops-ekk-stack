@@ -30,12 +30,12 @@ variable "aws_region" {
 # variable "es_dedicated_master_count" {
 #     default = "2"
 # }
-# variable "elasticsearch_role_name" {
-#     default = "EKKElasticSearchRole"
-# }
-# variable "elasticsearch_role_policy_name" {
-#     default = "EKKElasticSearchRolePolicy"
-# }
+variable "ekk_role_name" {
+    default = "EKKRole"
+}
+variable "ekk_role_policy_name" {
+    default = "EKKRolePolicy"
+}
 variable "s3_delivery_role_name" {
     default = "EKKS3DeliveryRole"
 }

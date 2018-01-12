@@ -86,63 +86,63 @@ resource "aws_iam_policy" "s3_log_bucket_iam_policy" {
   policy = "${data.aws_iam_policy_document.s3_log_bucket_access.json}"
 }
 
-# ElasticSearch
-# resource "aws_iam_role" "elasticsearch_role" {
-#     name = "${var.elasticsearch_role_name}"
-#     assume_role_policy = "${data.template_file.ec2_assume_role_policy.rendered}"
-# }
+ElasticSearch
+resource "aws_iam_role" "ekk_role" {
+    name = "${var.ekk_role_name}"
+    assume_role_policy = "${data.template_file.ec2_assume_role_policy.rendered}"
+}
 
-# resource "aws_iam_instance_profile" "elasticsearch_instance_profile" {
-#   name  = "${var.elasticsearch_role_name}-instance-profile"
-#   role = "${aws_iam_role.elasticsearch_role.name}"
-# }
+resource "aws_iam_instance_profile" "ekk_instance_profile" {
+  name  = "${var.ekk_role_name}-instance-profile"
+  role = "${aws_iam_role.ekk_role.name}"
+}
 
-# resource "aws_iam_policy" "elasticsearch_policy" {
-#     name = "${var.elasticsearch_role_policy_name}"
-#     policy = <<EOF
-# {
-#   "Version": "2012-10-17",
-#   "Statement": [
-#     {
-#       "Action": [
-#         "cloudwatch:GetMetricStatistics",
-#         "cloudwatch:ListMetrics",
-#         "cloudwatch:PutMetricAlarm",
-#         "cloudwatch:PutMetricData",
-#         "cloudwatch:SetAlarmState"
-#       ],
-#       "Effect": "Allow",
-#       "Resource": "*"
-#     }
-#   ]
-# }
-# EOF
-# }
+resource "aws_iam_policy" "ekk_policy" {
+    name = "${var.ekk_role_policy_name}"
+    policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "cloudwatch:GetMetricStatistics",
+        "cloudwatch:ListMetrics",
+        "cloudwatch:PutMetricAlarm",
+        "cloudwatch:PutMetricData",
+        "cloudwatch:SetAlarmState"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
 
-# resource "aws_iam_role_policy_attachment" "elasticsearch_policy_attach" {
-#     role = "${aws_iam_role.elasticsearch_role.name}"
-#     policy_arn = "${aws_iam_policy.elasticsearch_policy.arn}"
-# }
+resource "aws_iam_role_policy_attachment" "ekk_policy_attach" {
+    role = "${aws_iam_role.elasticsearch_role.name}"
+    policy_arn = "${aws_iam_policy.elasticsearch_policy.arn}"
+}
 
 # resource "aws_iam_role_policy_attachment" "es_full_access" {
 #     role = "${aws_iam_role.elasticsearch_role.name}"
 #     policy_arn = "arn:aws:iam::aws:policy/AmazonESFullAccess"
 # }
 
-# resource "aws_iam_role_policy_attachment" "s3_full_access" {
-#     role = "${aws_iam_role.elasticsearch_role.name}"
-#     policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-# }
+resource "aws_iam_role_policy_attachment" "s3_full_access" {
+    role = "${aws_iam_role.ekk_role.name}"
+    policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+}
 
-# resource "aws_iam_role_policy_attachment" "es_kinesisfirehouse_full_access" {
-#     role = "${aws_iam_role.elasticsearch_role.name}"
-#     policy_arn = "arn:aws:iam::aws:policy/AmazonKinesisFirehoseFullAccess"
-# }
+resource "aws_iam_role_policy_attachment" "kinesisfirehouse_full_access" {
+    role = "${aws_iam_role.ekk_role.name}"
+    policy_arn = "arn:aws:iam::aws:policy/AmazonKinesisFirehoseFullAccess"
+}
 
-# resource "aws_iam_role_policy_attachment" "es_cloudwatch_full_access" {
-#     role = "${aws_iam_role.elasticsearch_role.name}"
-#     policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
-# }
+resource "aws_iam_role_policy_attachment" "es_cloudwatch_full_access" {
+    role = "${aws_iam_role.ekk_role.name}"
+    policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
+}
 
 # resource "aws_iam_role" "elasticsearch_delivery_role" {
 #     name = "${var.es_delivery_role_name}"
