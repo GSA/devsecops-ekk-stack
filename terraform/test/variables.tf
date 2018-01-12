@@ -5,5 +5,8 @@ variable "ec_test_instance_key_name" {
     type = "string"
 }
 variable "kinesis_delivery_stream" {
-    default = "ElasticSearchKinesisDeliveryStream"
+    default = "DevSecOpsKinesisDeliveryStream"
+}
+variable "ekk_kinesis_stream_name" {
+    default = "DevSecOpsKinesisStream"
 }

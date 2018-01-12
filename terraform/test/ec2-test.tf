@@ -2,13 +2,14 @@ module "ekk_stack" {
   source = "../"
   s3_logging_bucket_name = "${var.s3_logging_bucket_name}"
   kinesis_delivery_stream = "${var.kinesis_delivery_stream}"
+  ekk_kinesis_stream_name = "${var.ekk_kinesis_stream_name}"
 }
 
 data "template_file" "user_data_template" {
   template = "${file("${path.module}/files/ec2-test.tpl")}"
 
   vars {
-    deliverystream = "${var.kinesis_delivery_stream}"
+    deliverystream = "${var.ekk_kinesis_stream_name}"
   }
 }
 
