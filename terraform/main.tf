@@ -144,6 +144,11 @@ resource "aws_iam_role_policy_attachment" "kinesisfirehouse_full_access" {
     policy_arn = "arn:aws:iam::aws:policy/AmazonKinesisFirehoseFullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "kinesis_stream_full_access" {
+    role = "${aws_iam_role.ekk_role.name}"
+    policy_arn = "arn:aws:iam::aws:policy/arn:aws:iam::aws:policy/AmazonKinesisFullAccess"
+}
+
 resource "aws_iam_role_policy_attachment" "es_cloudwatch_full_access" {
     role = "${aws_iam_role.ekk_role.name}"
     policy_arn = "arn:aws:iam::aws:policy/CloudWatchFullAccess"
@@ -164,11 +169,6 @@ resource "aws_kinesis_stream" "ekk_kinesis_stream" {
     shard_count = "${var.ekk_kinesis_stream_shard_count}"
     retention_period = "${var.ekk_kinesis_stream_retention_period}"
 
-    # shard_level_metrics = [
-    # "IncomingBytes",
-    # "OutgoingBytes",
-    # ]
-
     shard_level_metrics = "${var.ekk_kinesis_stream_shard_metrics}"
 
     encryption_type = "KMS"
@@ -180,7 +180,11 @@ resource "aws_kinesis_stream" "ekk_kinesis_stream" {
 resource "aws_kinesis_firehose_delivery_stream" "ekk_kinesis_delivery_stream" {
     name = "${var.kinesis_delivery_stream}"
     destination = "s3"
-    kinesis_source_configuration = "${aws_kinesis_stream.ekk_kinesis_stream.arn}"
+    kinesis_source_configuration = {
+        kinesis_stream_arm = "${aws_kinesis_stream.ekk_kinesis_stream.arn"
+        role_arn = "${aws_iam_role.ekk_role.arn}"
+    } 
+    
     # destination = "elasticsearch"
     
     # elasticsearch_configuration {
