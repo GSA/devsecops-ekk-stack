@@ -146,7 +146,7 @@ resource "aws_iam_role_policy_attachment" "kinesisfirehouse_full_access" {
 
 resource "aws_iam_role_policy_attachment" "kinesis_stream_full_access" {
     role = "${aws_iam_role.ekk_role.name}"
-    policy_arn = "arn:aws:iam::aws:policy/arn:aws:iam::aws:policy/AmazonKinesisFullAccess"
+    policy_arn = "arn:aws:iam::aws:policy/AmazonKinesisFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "es_cloudwatch_full_access" {
