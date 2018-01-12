@@ -114,7 +114,8 @@ resource "aws_iam_policy" "ekk_policy" {
         "cloudwatch:ListMetrics",
         "cloudwatch:PutMetricAlarm",
         "cloudwatch:PutMetricData",
-        "cloudwatch:SetAlarmState"
+        "cloudwatch:SetAlarmState",
+        "kms:GenerateDataKey"
       ],
       "Effect": "Allow",
       "Resource": "*"

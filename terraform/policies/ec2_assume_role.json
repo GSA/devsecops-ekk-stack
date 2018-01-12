@@ -8,6 +8,14 @@
             },
             "Effect": "Allow",
             "Sid": ""
+        },
+        {
+            "Action": "sts:AssumeRole",
+            "Principal": {
+                "Service": "firehose.amazonaws.com"
+            },
+            "Effect": "Allow",
+            "Sid": ""
         }
     ]
 }
