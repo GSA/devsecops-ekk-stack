@@ -32,7 +32,7 @@ variable "aws_region" {
 #     default = "devsecops-ekk-stack"
 # }
 # variable "es_version" {
-#     default = "1.5"
+#     default = "6.0"
 # }
 # variable "es_instance_type" {
 #     default = "t2.micro.elasticsearch"

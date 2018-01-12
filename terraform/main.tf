@@ -4,6 +4,12 @@ resource "aws_kms_key" "s3_logging_kms_key" {
     description = "S3 Logging KMS Key - Created by Terraform"
 }
 
+resource "aws_kms_key" "kinesis_stream_kms_key" {
+    count = "${var.ekk_kinesis_stream_kms_key_id == "" ? 1 : 0}"
+
+    description = "Kinesis Stream KMS Key - Created by Terraform"
+}
+
 # resource "aws_elasticsearch_domain" "elasticsearch" {
 #   domain_name = "${var.es_domain_name}"
 #   elasticsearch_version = "${var.es_version}"
@@ -168,11 +174,13 @@ resource "aws_kinesis_stream" "ekk_kinesis_stream" {
     encryption_type = "KMS"
     # Strangely, this uses the KMS GUID instead of the ARN
     kms_key_id = "${var.ekk_kinesis_stream_kms_key_id}"
+    kms_key_id = "${var.ekk_kinesis_stream_kms_key_id != "" ? ekk_kinesis_stream_kms_key_id : aws_kms_key.kinesis_stream_kms_key.key_id}"
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "ekk_kinesis_delivery_stream" {
     name = "${var.kinesis_delivery_stream}"
     destination = "s3"
+    kinesis_source_configuration = "${aws_kinesis_stream.ekk_kinesis_stream.arn}"
     # destination = "elasticsearch"
     
     # elasticsearch_configuration {
