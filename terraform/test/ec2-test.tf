@@ -9,7 +9,7 @@ data "template_file" "user_data_template" {
   template = "${file("${path.module}/files/ec2-test.tpl")}"
 
   vars {
-    deliverystream = "${var.ekk_kinesis_stream_name}"
+    kinesisstream = "${var.ekk_kinesis_stream_name}"
   }
 }
 
