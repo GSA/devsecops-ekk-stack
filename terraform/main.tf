@@ -155,7 +155,7 @@ resource "aws_iam_policy" "s3_log_bucket_iam_policy" {
 # }
 
 resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
-    name = "${var.es_kinesis_delivery_stream}"
+    name = "${var.kinesis_delivery_stream}"
     destination = "s3"
     # destination = "elasticsearch"
     
