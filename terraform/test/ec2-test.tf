@@ -1,14 +1,14 @@
 module "ekk_stack" {
   source = "../"
   s3_logging_bucket_name = "${var.s3_logging_bucket_name}"
-  es_kinesis_delivery_stream = "${var.es_kinesis_delivery_stream}"
+  kinesis_delivery_stream = "${var.kinesis_delivery_stream}"
 }
 
 data "template_file" "user_data_template" {
   template = "${file("${path.module}/files/ec2-test.tpl")}"
 
   vars {
-    deliverystream = "${var.es_kinesis_delivery_stream}"
+    deliverystream = "${var.kinesis_delivery_stream}"
   }
 }
 
@@ -31,7 +31,7 @@ data "aws_ami" "ec2-linux" {
 resource "aws_instance" "stream_tester" {
   ami           = "${data.aws_ami.ec2-linux.id}"
   instance_type = "t2.micro"
-  iam_instance_profile = "${module.ekk_stack.elasticsearch_instance_profile_id}"
+  iam_instance_profile = "${module.ekk_stack.ekk_instance_profile_id}"
 
   subnet_id = "${module.test_vpc.public_subnets[0]}"
   vpc_security_group_ids = ["${aws_security_group.main.id}"]
