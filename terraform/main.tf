@@ -86,7 +86,6 @@ resource "aws_iam_policy" "s3_log_bucket_iam_policy" {
   policy = "${data.aws_iam_policy_document.s3_log_bucket_access.json}"
 }
 
-ElasticSearch
 resource "aws_iam_role" "ekk_role" {
     name = "${var.ekk_role_name}"
     assume_role_policy = "${data.template_file.ec2_assume_role_policy.rendered}"
@@ -120,8 +119,8 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "ekk_policy_attach" {
-    role = "${aws_iam_role.elasticsearch_role.name}"
-    policy_arn = "${aws_iam_policy.elasticsearch_policy.arn}"
+    role = "${aws_iam_role.ekk_role.name}"
+    policy_arn = "${aws_iam_policy.ekk_policy.arn}"
 }
 
 # resource "aws_iam_role_policy_attachment" "es_full_access" {
