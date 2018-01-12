@@ -153,7 +153,24 @@ resource "aws_iam_role_policy_attachment" "es_cloudwatch_full_access" {
 #     policy_arn = "arn:aws:iam::aws:policy/AmazonESFullAccess"
 # }
 
-resource "aws_kinesis_firehose_delivery_stream" "extended_s3_stream" {
+resource "aws_kinesis_stream" "ekk_kinesis_stream" {
+    name = "${var.ekk_kinesis_stream_name}"
+    shard_count = "${var.ekk_kinesis_stream_shard_count}"
+    retention_period = "${var.ekk_kinesis_stream_retention_period}"
+
+    # shard_level_metrics = [
+    # "IncomingBytes",
+    # "OutgoingBytes",
+    # ]
+
+    shard_level_metrics = "${var.ekk_kinesis_stream_shard_metrics}"
+
+    encryption_type = "KMS"
+    # Strangely, this uses the KMS GUID instead of the ARN
+    kms_key_id = "${var.ekk_kinesis_stream_kms_key_id}"
+}
+
+resource "aws_kinesis_firehose_delivery_stream" "ekk_kinesis_delivery_stream" {
     name = "${var.kinesis_delivery_stream}"
     destination = "s3"
     # destination = "elasticsearch"
