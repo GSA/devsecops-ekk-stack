@@ -31,7 +31,7 @@ data "aws_ami" "ec2-linux" {
 resource "aws_instance" "stream_tester" {
   ami           = "${data.aws_ami.ec2-linux.id}"
   instance_type = "t2.micro"
-  # iam_instance_profile = "${module.ekk_stack.elasticsearch_instance_profile_id}"
+  iam_instance_profile = "${module.ekk_stack.ekk_instance_profile_id}"
 
   subnet_id = "${module.test_vpc.public_subnets[0]}"
   vpc_security_group_ids = ["${aws_security_group.main.id}"]
