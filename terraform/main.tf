@@ -181,7 +181,7 @@ resource "aws_kinesis_firehose_delivery_stream" "ekk_kinesis_delivery_stream" {
     name = "${var.kinesis_delivery_stream}"
     destination = "s3"
     kinesis_source_configuration = {
-        kinesis_stream_arm = "${aws_kinesis_stream.ekk_kinesis_stream.arn"
+        kinesis_stream_arn = "${aws_kinesis_stream.ekk_kinesis_stream.arn}",
         role_arn = "${aws_iam_role.ekk_role.arn}"
     } 
     
