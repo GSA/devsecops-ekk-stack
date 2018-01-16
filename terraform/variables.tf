@@ -4,10 +4,26 @@ variable "s3_logging_bucket_name" {
 variable "kinesis_delivery_stream" {
     type = "string"
 }
+variable "ekk_kinesis_stream_name" {
+    type = "string"
+}
 variable "s3_kms_key_arn" {
     type = "string"
     description = "KMS Key ARN used to encrypt data within S3 bucket. The key must already exist within the account."
     default = ""
+}
+variable "ekk_kinesis_stream_kms_key_id" {
+    description = "This is the GUID of a KMS key, not the ARN!"
+    default = ""
+}
+variable "ekk_kinesis_stream_shard_count" {
+    default = "1"
+}
+variable "ekk_kinesis_stream_retention_period" {
+    default = "24"
+}
+variable "ekk_kinesis_stream_shard_metrics" {
+    default = ["IncomingBytes", "OutgoingBytes"]
 }
 variable "aws_region" {
     default = "us-east-1"
@@ -16,7 +32,7 @@ variable "aws_region" {
 #     default = "devsecops-ekk-stack"
 # }
 # variable "es_version" {
-#     default = "1.5"
+#     default = "6.0"
 # }
 # variable "es_instance_type" {
 #     default = "t2.micro.elasticsearch"

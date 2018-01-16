@@ -12,7 +12,7 @@ cat<<EOF>/etc/aws-kinesis/agent.json
     "flows": [
         {
             "filePattern": "/var/log/httpd/access_log",
-            "deliveryStream": "${deliverystream}",
+            "kinesisStream": "${kinesisstream}",
             "dataProcessingOptions": [
                 {
                     "optionName": "LOGTOJSON",
