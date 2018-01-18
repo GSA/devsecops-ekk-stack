@@ -14,11 +14,12 @@ This stack is meant to be consumed as a module in your existing terraform stack.
 module "ekk_stack" {
     source = "github.com/GSA/devsecops-ekk-stack//terraform"
     s3_logging_bucket_name = "${var.s3_logging_bucket_name}"
-    es_kinesis_delivery_stream = "${var.es_kinesis_delivery_stream}"
+    kinesis_delivery_stream = "${var.kinesis_delivery_stream}"
+    ekk_kinesis_stream_name = "${var.ekk_kinesis_stream_name}"
 }
 ```
 
-...where the variables referenced above are defined in your terraform.tfvars file. "var.s3_logging_bucket_name" should be set to a bucket (which the stack will create) to contain copies of the kinesis firehose logs. "var.es_kinesis_delivery_stream" should be set to the name of the firehose delivery stream that you wish to use. The EKK stack will create this delivery stream with the name you provide with this variable.
+...where the variables referenced above are defined in your terraform.tfvars file. "var.s3_logging_bucket_name" should be set to a bucket (which the stack will create) to contain copies of the kinesis firehose logs. "var.kinesis_delivery_stream" should be set to the name of the firehose delivery stream that you wish to use. The EKK stack will create this delivery stream with the name you provide with this variable.
 
 The Kinesis stream will send to Elasticsearch and S3.
 
