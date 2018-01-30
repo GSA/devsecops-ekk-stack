@@ -3,6 +3,8 @@ module "ekk_stack" {
   s3_logging_bucket_name = "${var.s3_logging_bucket_name}"
   kinesis_delivery_stream = "${var.kinesis_delivery_stream}"
   ekk_kinesis_stream_name = "${var.ekk_kinesis_stream_name}"
+  es_instance_type = "${var.es_instance_type}"
+  es_dedicated_master_instance_type = "${var.es_dedicated_master_instance_type}"
 }
 
 data "template_file" "user_data_template" {
@@ -31,7 +33,7 @@ data "aws_ami" "ec2-linux" {
 
 resource "aws_instance" "stream_tester" {
   ami           = "${data.aws_ami.ec2-linux.id}"
-  instance_type = "t2.micro"
+  instance_type = "m4.xlarge"
   iam_instance_profile = "${module.ekk_stack.ekk_instance_profile_id}"
 
   subnet_id = "${module.test_vpc.public_subnets[0]}"
