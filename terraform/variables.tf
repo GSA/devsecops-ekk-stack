@@ -16,6 +16,10 @@ variable "ekk_kinesis_stream_kms_key_id" {
     description = "This is the GUID of a KMS key, not the ARN!"
     default = ""
 }
+variable "ekk_kinesis_stream_kms_key_arn" {
+    description = "This is the ARN of a KMS key, not the GUID!"
+    default = ""
+}
 variable "ekk_kinesis_stream_shard_count" {
     default = "1"
 }

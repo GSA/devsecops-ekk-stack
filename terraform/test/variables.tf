@@ -10,3 +10,9 @@ variable "kinesis_delivery_stream" {
 variable "ekk_kinesis_stream_name" {
     default = "DevSecOpsKinesisStream"
 }
+variable "es_instance_type" {
+    default = "t2.micro.elasticsearch"
+}
+variable "es_dedicated_master_instance_type" {
+    default = "t2.micro.elasticsearch"
+}
